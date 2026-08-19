@@ -36,6 +36,8 @@ class BOCarriersCreatePage extends BOBasePage implements BOCarriersCreatePageInt
 
   protected freeShippingToggle: (toggle: string) => string;
 
+  protected billingConfigRadioButton: string;
+
   protected billingPriceRadioButton: string;
 
   protected billingWeightButton: string;
@@ -122,8 +124,9 @@ class BOCarriersCreatePage extends BOBasePage implements BOCarriersCreatePageInt
     this.addHandlingCostsToggle = (toggle: string) => `${this.carrierForm
     } #carrier_shipping_settings_has_additional_handling_fee_${toggle}`;
     this.freeShippingToggle = (toggle: string) => `${this.carrierForm} #carrier_shipping_settings_is_free_${toggle}`;
-    this.billingPriceRadioButton = `${this.carrierForm} #carrier_shipping_settings_shipping_method_0`;
-    this.billingWeightButton = `${this.carrierForm} #carrier_shipping_settings_shipping_method_1`;
+    this.billingConfigRadioButton = `${this.carrierForm} input[name="carrier[shipping_settings][shipping_method]"][value="0"]`;
+    this.billingPriceRadioButton = `${this.carrierForm} input[name="carrier[shipping_settings][shipping_method]"][value="2"]`;
+    this.billingWeightButton = `${this.carrierForm} input[name="carrier[shipping_settings][shipping_method]"][value="1"]`;
     this.taxRuleSelect = `${this.carrierForm} #carrier_shipping_settings_id_tax_rule_group`;
     this.rangeBehaviorSelect = `${this.carrierForm} #carrier_shipping_settings_range_behavior`;
     /// Zones
@@ -227,6 +230,8 @@ class BOCarriersCreatePage extends BOBasePage implements BOCarriersCreatePageInt
       await this.selectByVisibleText(page, this.taxRuleSelect, carrierData.taxRule);
       if (carrierData.billing === 'According to total price') {
         await page.locator(this.billingPriceRadioButton).click();
+      } else if (carrierData.billing === 'Based on the shop configuration') {
+        await page.locator(this.billingConfigRadioButton).click();
       } else {
         await page.locator(this.billingWeightButton).click();
       }
