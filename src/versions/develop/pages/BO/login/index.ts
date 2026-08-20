@@ -110,11 +110,12 @@ class LoginPage extends BOBasePage implements LoginPageInterface {
 
   /**
    * Click on twitter link
+   * X (twitter) blocks headless browsers and serves an empty body, so the new page content is not waited for
    * @param page {Page} Browser tab
    * @return {Promise<Page>}
    */
   async clickOnTwitterLink(page: Page): Promise<Page> {
-    return this.openLinkWithTargetBlank(page, this.twitterLink, 'body');
+    return this.openLinkWithTargetBlank(page, this.twitterLink, 'body', 'load', false);
   }
 
   /**
