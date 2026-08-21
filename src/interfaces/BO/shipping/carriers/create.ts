@@ -7,4 +7,5 @@ export interface BOCarriersCreatePageInterface extends BOBasePagePageInterface {
   readonly pageTitleEdit: string;
 
   createEditCarrier(page: Page, carrierData: FakerCarrier): Promise<string>;
+  getBillingSelection(page: Page): Promise<string>;
 }
