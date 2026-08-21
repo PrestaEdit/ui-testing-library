@@ -162,6 +162,27 @@ class BOCarriersCreatePage extends BOBasePage implements BOCarriersCreatePageInt
   /* Methods */
 
   /**
+   * Get the billing option currently selected in the shipping locations and costs tab
+   * @param page {Page} Browser tab
+   * @return {Promise<string>}
+   */
+  async getBillingSelection(page: Page): Promise<string> {
+    await page.locator(this.tabShippingSettings).click();
+
+    if (await page.locator(this.billingConfigRadioButton).isChecked()) {
+      return 'Based on the shop configuration';
+    }
+    if (await page.locator(this.billingPriceRadioButton).isChecked()) {
+      return 'According to total price';
+    }
+    if (await page.locator(this.billingWeightButton).isChecked()) {
+      return 'According to total weight';
+    }
+
+    return '';
+  }
+
+  /**
    * Fill carrier form in create or edit page and save
    * @param page {Page} Browser tab
    * @param carrierData {FakerCarrier} Carrier information
