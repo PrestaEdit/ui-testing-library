@@ -36,8 +36,6 @@ class BOCarriersCreatePage extends BOBasePage implements BOCarriersCreatePageInt
 
   protected freeShippingToggle: (toggle: string) => string;
 
-  protected billingConfigRadioButton: string;
-
   protected billingPriceRadioButton: string;
 
   protected billingWeightButton: string;
@@ -124,7 +122,6 @@ class BOCarriersCreatePage extends BOBasePage implements BOCarriersCreatePageInt
     this.addHandlingCostsToggle = (toggle: string) => `${this.carrierForm
     } #carrier_shipping_settings_has_additional_handling_fee_${toggle}`;
     this.freeShippingToggle = (toggle: string) => `${this.carrierForm} #carrier_shipping_settings_is_free_${toggle}`;
-    this.billingConfigRadioButton = `${this.carrierForm} input[name="carrier[shipping_settings][shipping_method]"][value="0"]`;
     this.billingPriceRadioButton = `${this.carrierForm} input[name="carrier[shipping_settings][shipping_method]"][value="2"]`;
     this.billingWeightButton = `${this.carrierForm} input[name="carrier[shipping_settings][shipping_method]"][value="1"]`;
     this.taxRuleSelect = `${this.carrierForm} #carrier_shipping_settings_id_tax_rule_group`;
@@ -160,27 +157,6 @@ class BOCarriersCreatePage extends BOBasePage implements BOCarriersCreatePageInt
   }
 
   /* Methods */
-
-  /**
-   * Get the billing option currently selected in the shipping locations and costs tab
-   * @param page {Page} Browser tab
-   * @return {Promise<string>}
-   */
-  async getBillingSelection(page: Page): Promise<string> {
-    await page.locator(this.tabShippingSettings).click();
-
-    if (await page.locator(this.billingConfigRadioButton).isChecked()) {
-      return 'Based on the shop configuration';
-    }
-    if (await page.locator(this.billingPriceRadioButton).isChecked()) {
-      return 'According to total price';
-    }
-    if (await page.locator(this.billingWeightButton).isChecked()) {
-      return 'According to total weight';
-    }
-
-    return '';
-  }
 
   /**
    * Fill carrier form in create or edit page and save
@@ -251,8 +227,6 @@ class BOCarriersCreatePage extends BOBasePage implements BOCarriersCreatePageInt
       await this.selectByVisibleText(page, this.taxRuleSelect, carrierData.taxRule);
       if (carrierData.billing === 'According to total price') {
         await page.locator(this.billingPriceRadioButton).click();
-      } else if (carrierData.billing === 'Based on the shop configuration') {
-        await page.locator(this.billingConfigRadioButton).click();
       } else {
         await page.locator(this.billingWeightButton).click();
       }
